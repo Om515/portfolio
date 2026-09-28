@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Om Satpute | Full-stack developer</title>
+  <meta name="description"
+    content="Portfolio of Om Satpute, a Computer Science student at PICT, Pune who builds full-stack apps and wrote a relational database from scratch.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F2F4F8;
+      --surface: #FFFFFF;
+      --ink: #12203F;
+      --muted: #55627F;
+      --line: #D3DAE8;
+      --accent: #2F54EB;
+      --accent-ink: #FFFFFF;
+      --term-bg: #0E1A38;
+      --term-fg: #DCE4FF;
+      --term-dim: #8C9AC2;
+      --term-line: #26365F;
+      --term-prompt: #FFB454;
+      --term-key: #7DB1FF;
+      --term-err: #FF8A80;
+      --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+      --body: "Instrument Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+      --mono: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0A1024;
+        --surface: #111A36;
+        --ink: #E6EBFA;
+        --muted: #9AA6C6;
+        --line: #243052;
+        --accent: #7C9BFF;
+        --accent-ink: #0A1024;
+        --term-bg: #060B1A;
+        --term-line: #22305A;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0A1024;
+      --surface: #111A36;
+      --ink: #E6EBFA;
+      --muted: #9AA6C6;
+      --line: #243052;
+      --accent: #7C9BFF;
+      --accent-ink: #0A1024;
+      --term-bg: #060B1A;
+      --term-line: #22305A;
+    }
+
+    html {
+      scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 1rem);
+      scroll-behavior: smooth
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 3px
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding-inline: clamp(1rem, 4vw, 2rem)
+    }
+
+    /* header */
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      padding-block: 1.25rem
+    }
+
+    .top .who {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 1.125rem;
+      text-decoration: none;
+      letter-spacing: -.01em
+    }
+
+    .top nav {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap
+    }
+
+    .top nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: .95rem
+    }
+
+    .top nav a:hover {
+      color: var(--ink);
+      text-decoration: underline;
+      text-underline-offset: 4px
+    }
+
+    .theme {
+      font: inherit;
+      font-size: .9rem;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: .25rem .8rem;
+      cursor: pointer
+    }
+
+    .theme:hover {
+      color: var(--ink);
+      border-color: var(--muted)
+    }
+
+    /* hero */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: 2.5rem 3.5rem;
+      align-items: start;
+      padding-block: clamp(2rem, 6vw, 4.5rem) clamp(3rem, 7vw, 5.5rem)
+    }
+
+    .hero h1 {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: clamp(2.75rem, 7vw, 5.25rem);
+      line-height: .98;
+      letter-spacing: -.035em;
+      margin: 0 0 1.25rem
+    }
+
+    .hero .tag {
+      font-family: var(--display);
+      font-weight: 500;
+      font-size: clamp(1.3rem, 2.4vw, 1.75rem);
+      line-height: 1.25;
+      letter-spacing: -.01em;
+      margin: 0 0 1rem;
+      max-width: 22ch
+    }
+
+    .hero .sub {
+      color: var(--muted);
+      max-width: 44ch;
+      margin: 0 0 1.75rem
+    }
+
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem
+    }
+
+    .btn {
+      display: inline-block;
+      font-weight: 600;
+      font-size: .98rem;
+      text-decoration: none;
+      padding: .65rem 1.15rem;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink)
+    }
+
+    .btn:hover {
+      border-color: var(--muted)
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      color: var(--accent-ink);
+      border-color: var(--accent)
+    }
+
+    .btn.primary:hover {
+      filter: brightness(1.08)
+    }
+
+    /* terminal */
+    .term {
+      background: var(--term-bg);
+      color: var(--term-fg);
+      border: 1px solid var(--term-line);
+      border-radius: 12px;
+      overflow: hidden;
+      font-family: var(--mono);
+      font-size: .86rem;
+      line-height: 1.55;
+      box-shadow: 0 18px 40px -22px rgba(14, 26, 56, .55)
+    }
+
+    .term-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .7rem 1rem;
+      border-bottom: 1px solid var(--term-line);
+      color: var(--term-dim);
+      font-size: .78rem
+    }
+
+    .term-body {
+      height: min(26rem, 62vh);
+      overflow: auto;
+      padding: 1rem;
+      overscroll-behavior: contain
+    }
+
+    .echo {
+      margin: 0 0 .5rem;
+      word-break: break-word
+    }
+
+    .p {
+      color: var(--term-prompt);
+      margin-right: .6rem;
+      user-select: none
+    }
+
+    .rec {
+      margin: 0 0 .9rem
+    }
+
+    .rec-h {
+      color: var(--term-dim)
+    }
+
+    .kv {
+      display: grid;
+      grid-template-columns: 8.5rem minmax(0, 1fr);
+      column-gap: 1rem
+    }
+
+    .kv .k {
+      color: var(--term-key)
+    }
+
+    .kv .v {
+      word-break: break-word
+    }
+
+    .note {
+      color: var(--term-dim);
+      margin: 0 0 .9rem
+    }
+
+    .err {
+      color: var(--term-err);
+      margin: 0 0 .9rem
+    }
+
+    .help-row {
+      display: grid;
+      grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+      column-gap: 1rem
+    }
+
+    .term-in {
+      display: flex;
+      align-items: center;
+      padding: .75rem 1rem;
+      border-top: 1px solid var(--term-line)
+    }
+
+    .term-in input {
+      flex: 1;
+      min-width: 0;
+      background: none;
+      border: 0;
+      color: var(--term-fg);
+      font: inherit;
+      font-size: 1rem;
+      caret-color: var(--term-prompt)
+    }
+
+    .term-in input:focus-visible {
+      outline: none
+    }
+
+    .term-in:focus-within {
+      box-shadow: inset 0 0 0 2px var(--term-key)
+    }
+
+    .term-in input::placeholder {
+      color: var(--term-dim)
+    }
+
+    .try {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .5rem;
+      padding: .7rem 1rem 1rem;
+      border-top: 1px solid var(--term-line);
+      color: var(--term-dim);
+      font-size: .78rem
+    }
+
+    .try button {
+      font: inherit;
+      color: var(--term-fg);
+      background: none;
+      border: 1px solid var(--term-line);
+      border-radius: 6px;
+      padding: .25rem .65rem;
+      cursor: pointer
+    }
+
+    .try button:hover {
+      border-color: var(--term-key);
+      color: #fff
+    }
+
+    .term :focus-visible {
+      outline: 2px solid var(--term-key);
+      outline-offset: 2px
+    }
+
+    /* sections */
+    .sec {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2.6fr);
+      gap: 1.5rem 4rem;
+      padding-block: 3.5rem;
+      border-top: 1px solid var(--line)
+    }
+
+    .sec-head h2 {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 1.75rem;
+      letter-spacing: -.02em;
+      line-height: 1.1;
+      margin: 0;
+      position: sticky;
+      top: 1.5rem
+    }
+
+    .item {
+      padding-block: 1.75rem;
+      border-top: 1px solid var(--line)
+    }
+
+    .item:first-child {
+      padding-top: 0;
+      border-top: 0
+    }
+
+    .item:last-child {
+      padding-bottom: 0
+    }
+
+    .item h3 {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: -.015em;
+      line-height: 1.15;
+      margin: 0 0 .35rem
+    }
+
+    .item .meta {
+      font-size: .95rem;
+      color: var(--muted);
+      margin: 0 0 .5rem
+    }
+
+    .item .stack {
+      font-family: var(--mono);
+      font-size: .8rem;
+      line-height: 1.6;
+      color: var(--muted);
+      margin: 0 0 1rem;
+      max-width: 62ch
+    }
+
+    .item ul {
+      margin: 0;
+      padding-left: 1.15rem;
+      max-width: 64ch
+    }
+
+    .item li {
+      margin-bottom: .45rem
+    }
+
+    .item li::marker {
+      color: var(--accent)
+    }
+
+    .rows {
+      display: grid;
+      grid-template-columns: minmax(0, 9rem) minmax(0, 1fr);
+      margin: 0
+    }
+
+    .rows dt,
+    .rows dd {
+      margin: 0;
+      padding-block: .8rem;
+      border-top: 1px solid var(--line)
+    }
+
+    .rows dt:first-of-type,
+    .rows dd:first-of-type {
+      border-top: 0;
+      padding-top: 0
+    }
+
+    .rows dt {
+      color: var(--muted)
+    }
+
+    .rows dd {
+      font-weight: 500
+    }
+
+    .foot {
+      padding-block: 2.5rem 3rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .95rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem 2rem;
+      justify-content: space-between
+    }
+
+    @media (max-width:860px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr)
+      }
+
+      .sec {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.25rem;
+        padding-block: 2.75rem
+      }
+
+      .sec-head h2 {
+        position: static
+      }
+
+      .kv {
+        grid-template-columns: 6.5rem minmax(0, 1fr)
+      }
+
+      .help-row {
+        grid-template-columns: minmax(0, 1fr)
+      }
+
+      .rows {
+        grid-template-columns: minmax(0, 7rem) minmax(0, 1fr)
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a class="who" href="#top">Om Satpute</a>
+      <nav aria-label="Sections">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+        <button class="theme" id="theme" type="button" aria-label="Switch between light and dark theme">Theme</button>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-label="Introduction">
+        <div>
+          <h1>Om Satpute</h1>
+          <p class="tag">Full-stack developer who built his own database from scratch.</p>
+          <p class="sub">Computer Science student at PICT, Pune, with a 9.465 CGPA and 600+ DSA problems solved. I build
+            with React, Node.js and Java.</p>
+          <div class="cta" id="cta">
+            <a class="btn primary" href="mailto:omsatpute111@gmail.com">Email me</a>
+            <a class="btn" href="#projects">See projects</a>
+            <div style="flex-basis: 100%; height: 0; margin: 0;"></div>
+            <a class="btn" href="assets/C2K23133_OmSatpute_Resume.pdf" target="_blank" rel="noopener noreferrer">Preview
+              Resume</a>
+            <a class="btn" href="assets/C2K23133_OmSatpute_Resume.pdf" download="Om_Satpute_Resume.pdf">Download Resume</a>
+          </div>
+        </div>
+
+        <div class="term" role="group" aria-label="Interactive SQL shell with Om's details">
+          <div class="term-head"><span>portfolio.db</span><span>type help for commands</span></div>
+          <div class="term-body" id="out" role="log" aria-live="polite"></div>
+          <label class="term-in">
+            <span class="p" aria-hidden="true">sql&gt;</span>
+            <input id="q" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"
+              aria-label="SQL query" placeholder="Type a query, press Enter">
+          </label>
+          <div class="try">
+            <span>Run</span>
+            <button type="button" data-q="SELECT * FROM projects;">projects</button>
+            <button type="button" data-q="SELECT * FROM experience;">experience</button>
+            <button type="button" data-q="SELECT category, items FROM skills;">skills</button>
+            <button type="button" data-q="SELECT name FROM projects WHERE stack LIKE '%React%';">React projects</button>
+            <button type="button" data-q="SELECT * FROM contact;">contact</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec about-section" id="about">
+        <div class="sec-head">
+          <img src="assets/img.jpeg" onerror="this.src='img.png';this.onerror=null;" alt="Om Satpute"
+            style="width:100%; max-width:280px; aspect-ratio:4/5; object-fit:cover; border-radius:12px; border:1px solid var(--line); box-shadow:0 18px 40px -22px rgba(14,26,56,.25);">
+        </div>
+        <div class="sec-body">
+          <h2
+            style="font-family:var(--display); font-weight:700; font-size:1.75rem; letter-spacing:-.02em; line-height:1.1; margin:0 0 1rem;">
+            About Me</h2>
+          <p style="margin:0 0 1rem; color:var(--muted); max-width:62ch;">I'm Om Satpute, a Computer Science student at
+            PICT, Pune and a full-stack developer interested in building practical, scalable web applications.</p>
+          <p style="margin:0 0 1.75rem; color:var(--muted); max-width:62ch;">I enjoy working across the frontend and
+            backend, and I like understanding how systems work under the hood. My projects include full-stack MERN
+            applications, Java-based systems, and a relational database built from scratch.</p>
+
+          <dl class="rows" style="max-width:30rem;">
+            <dt>Degree</dt>
+            <dd>B.E. Computer Science</dd>
+            <dt>College</dt>
+            <dd>PICT, Pune</dd>
+            <dt>CGPA</dt>
+            <dd>9.465 / 10</dd>
+            <dt>DSA</dt>
+            <dd>600+ problems</dd>
+          </dl>
+        </div>
+      </section>
+
+      <section class="sec" id="projects">
+        <div class="sec-head">
+          <h2>Projects</h2>
+        </div>
+        <div class="sec-body" id="projects-list"></div>
+      </section>
+
+      <section class="sec" id="experience">
+        <div class="sec-head">
+          <h2>Experience</h2>
+        </div>
+        <div class="sec-body" id="experience-list"></div>
+      </section>
+
+      <section class="sec" id="skills">
+        <div class="sec-head">
+          <h2>Skills</h2>
+        </div>
+        <div class="sec-body">
+          <dl class="rows" id="skills-list"></dl>
+        </div>
+      </section>
+
+      <section class="sec" id="education">
+        <div class="sec-head">
+          <h2>Education</h2>
+        </div>
+        <div class="sec-body" id="education-list"></div>
+      </section>
+
+      <section class="sec" id="beyond">
+        <div class="sec-head">
+          <h2>Beyond code</h2>
+        </div>
+        <div class="sec-body">
+          <ul class="rows-list" id="beyond-list" style="margin:0;padding-left:1.15rem"></ul>
+        </div>
+      </section>
+
+      <section class="sec" id="contact">
+        <div class="sec-head">
+          <h2>Get in touch</h2>
+        </div>
+        <div class="sec-body">
+          <p style="margin:0 0 1.25rem;max-width:52ch">The quickest way to reach me is email. I read everything.</p>
+          <div class="cta" id="cta2">
+            <a class="btn primary" href="mailto:omsatpute111@gmail.com">omsatpute111@gmail.com</a>
+            <a class="btn primary" href="tel:8149959599">8149959599</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span>Om Satpute, Pune, India</span>
+      <span>Try the SQL shell at the top of the page.</span>
+    </footer>
+  </div>
+
+  <script>
+    /* ---------- Edit these ---------- */
+    var EMAIL = "omsatpute111@gmail.com";
+    var LINKS = { github: "", leetcode: "" };   /* paste full URLs; empty ones stay hidden */
+
+    /* ---------- Content (single source for page and SQL shell) ---------- */
+    var DATA = {
+      about: [{
+        name: "Om Satpute",
+        role: "Full-stack developer",
+        degree: "B.E. Computer Science",
+        college: "PICT, Pune",
+        cgpa: "9.465 / 10",
+        dsa_solved: "600+"
+      }],
+      projects: [
+        {
+          name: "NovaDB",
+          summary: "Relational database built from scratch in Java, with a custom SQL parser and CLI.",
+          stack: "Java, Object-Oriented Programming, Exception Handling, File System, B+ Tree",
+          title: "NovaDB, a relational database management system",
+          howItWorks: "A query goes through my custom SQL parser, which turns the text into a command. The command uses a B+ Tree index to find records quickly instead of scanning every row. Records are stored in files on disk, and constraint checks (PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL) run before any write.",
+          github: "https://github.com/Om515/NovaDB.git",
+          bullets: [
+            "Built from scratch with a custom SQL parser and command-line interface.",
+            "Supports CREATE, INSERT, SELECT, UPDATE, DELETE, DROP and JOIN.",
+            "B+ Tree indexing speeds up query execution and record retrieval.",
+            "PRIMARY KEY, FOREIGN KEY, UNIQUE and NOT NULL constraints protect data integrity.",
+            "Error handling covers invalid queries, constraint violations and runtime errors."
+          ]
+        },
+        {
+          name: "PetConnect",
+          summary: "Multi-role MERN platform for pet owners, caretakers and admins, with payments, real-time chat and Gemini AI.",
+          stack: "React.js, Vite, Tailwind CSS, Node.js, Express.js, MongoDB, Socket.io, Razorpay, Gemini AI, Cloudinary, Nodemailer, Cron Jobs",
+          title: "PetConnect, a full-stack MERN platform",
+          problemSolved: "Finding a trustworthy platform for pet adoption and rehoming can be difficult. Existing platforms often lack proper user verification, reliable communication, transparent reviews, and integrated caretaker services. PetConnect provides a centralized platform where users can discover pets, connect with caretakers, communicate in real time, make payments, and manage pet-related services.",
+          github: "https://github.com/Om515/Petconnect.git",
+          bullets: [
+            "Serves Users, Caretakers and Admins with JWT and Google OAuth sign-in, role-based access control and OTP password recovery.",
+            "Includes a pet marketplace, caretaker bookings, admin moderation and Cloudinary image management, with Razorpay payments for transactions and premium subscriptions.",
+            "Real-time chat and notifications run on Socket.io. Google Gemini AI is integrated with custom rate limiting for usage quotas.",
+            "Scheduled emails and background tasks run on Nodemailer and Cron jobs."
+          ]
+        },
+        {
+          name: "EDUFLEX",
+          summary: "Classroom management platform with role-based access, live quizzes and attendance tracking.",
+          stack: "React.js, Node.js, Express.js, MongoDB, Socket.IO",
+          title: "EDUFLEX, a classroom management platform",
+          problemSolved: "I developed a scalable Full-stack Virtual Classroom Platform (MERN + WebRTC) that solves the fragmentation typically found in EdTech software. Instead of relying on separate apps for video conferencing, messaging, and learning management, this platform centralizes Live Video classes, real-time Socket.io chat, automated assessment workflows, and role-based administrative dashboards into a single, cohesive academic ecosystem.",
+          github: "https://github.com/Om515/EDUFLEX.git",
+          bullets: [
+            "Role-based access control for Admins, Teachers and Students.",
+            "JWT authentication and authorization, plus Google OAuth sign-in.",
+            "Socket.IO powers real-time classroom communication and live quizzes.",
+            "Covers classroom management, attendance tracking, tests and email services with Nodemailer.",
+            "Implemented real-time peer-to-peer communication using WebRTC and Socket.io, featuring robust video streaming, interactive audio controls, and screen sharing for virtual classroom environments."
+          ]
+        }
+      ],
+      experience: [
+        {
+          role: "Research Intern",
+          org: "Pune Institute of Computer Technology (PICT)",
+          period: "Jan 2026 to Apr 2026",
+          summary: "Built a CSP-based timetable engine that schedules 500+ sessions without conflicts.",
+          stack: "Node.js, Express.js, MySQL, Sequelize, React.js",
+          bullets: [
+            "Designed a CSP-based timetable engine in Node.js and Express.js with custom heuristics, generating conflict-free schedules for 500+ sessions.",
+            "Built the MySQL and Sequelize backend with 10 relational models, 28 REST APIs, indexing and transactions.",
+            "Created a React.js frontend with timetable views for divisions, teachers, halls and labs, with PDF export."
+          ]
+        }
+      ],
+      skills: [
+        { category: "Languages", items: "C++, Java, JavaScript, SQL" },
+        { category: "Core Java", items: "Collections Framework, OOP, Exception Handling, Multithreading, Java Streams and Lambdas, File I/O" },
+        { category: "Frontend", items: "React.js, Redux Toolkit, Vite" },
+        { category: "Backend", items: "Node.js, Express.js, REST APIs, JWT Authentication, Socket.io, WebRTC" },
+        { category: "Databases", items: "MongoDB, MySQL" },
+        { category: "Core subjects", items: "Data Structures and Algorithms, OOP, DBMS, OS, CNS" }
+      ],
+      education: [
+        { institution: "Pune Institute of Computer Technology (PICT), Pune", degree: "Bachelor of Engineering in Computer Science", period: "2023 to present", score: "Current CGPA 9.465 / 10" },
+        { institution: "Pride Academy and Junior College, Shrirampur", degree: "HSC (Class XII)", period: "2022 to 2023", score: "80.33%" },
+        { institution: "S. J. Patni Vidyalaya, Shrirampur", degree: "SSC (Class X)", period: "2020 to 2021", score: "95.20%" }
+      ],
+      activities: [
+        "Member, PICT IEEE Student Branch",
+        "Volunteer, Credenz Group Day",
+        "Winner, College Cricket Championship, Season 3"
+      ]
+    };
+    DATA.contact = [{ channel: "email", value: EMAIL }, { channel: "phone", value: "8149959599" }];
+    if (LINKS.github) DATA.contact.push({ channel: "github", value: LINKS.github });
+    if (LINKS.leetcode) DATA.contact.push({ channel: "leetcode", value: LINKS.leetcode });
+
+    /* ---------- Page sections ---------- */
+    function el(tag, cls, text) {
+      var n = document.createElement(tag);
+      if (cls) n.className = cls;
+      if (text != null) n.textContent = text;
+      return n;
+    }
+    function listItem(title, meta, stack, bullets) {
+      var d = el("article", "item");
+      d.appendChild(el("h3", null, title));
+      if (meta) d.appendChild(el("p", "meta", meta));
+      if (stack) d.appendChild(el("p", "stack", stack));
+      if (bullets) {
+        var ul = el("ul");
+        bullets.forEach(function (b) { ul.appendChild(el("li", null, b)); });
+        d.appendChild(ul);
+      }
+      return d;
+    }
+    (function renderPage() {
+      var p = document.getElementById("projects-list");
+      DATA.projects.forEach(function (x) {
+        var item = listItem(x.title, null, x.stack, x.bullets);
+        if (x.problemSolved) {
+          var ps = el("p", "meta");
+          ps.textContent = x.problemSolved;
+          var psStrong = document.createElement("strong");
+          psStrong.textContent = "What problem does this solve: ";
+          ps.insertBefore(psStrong, ps.firstChild);
+          var ul = item.querySelector("ul");
+          if (ul) {
+            item.insertBefore(ps, ul);
+          } else {
+            item.appendChild(ps);
+          }
+        }
+        if (x.howItWorks) {
+          var hiw = el("p", "meta");
+          hiw.textContent = x.howItWorks;
+          var strong = document.createElement("strong");
+          strong.textContent = "How it works: ";
+          hiw.insertBefore(strong, hiw.firstChild);
+          var ul = item.querySelector("ul");
+          if (ul) {
+            item.insertBefore(hiw, ul);
+          } else {
+            item.appendChild(hiw);
+          }
+        }
+        if (x.github) {
+          var btn = el("a", "btn", "View on GitHub");
+          btn.href = x.github;
+          btn.target = "_blank";
+          btn.rel = "noopener noreferrer";
+          btn.style.marginTop = "1rem";
+          btn.style.display = "inline-block";
+          item.appendChild(btn);
+        }
+        p.appendChild(item);
+      });
+
+      var e = document.getElementById("experience-list");
+      DATA.experience.forEach(function (x) {
+        e.appendChild(listItem(x.role, x.org + ", " + x.period, x.stack, x.bullets));
+      });
+
+      var s = document.getElementById("skills-list");
+      DATA.skills.forEach(function (x) {
+        s.appendChild(el("dt", null, x.category));
+        s.appendChild(el("dd", null, x.items));
+      });
+
+      var ed = document.getElementById("education-list");
+      DATA.education.forEach(function (x) {
+        ed.appendChild(listItem(x.institution, x.period, null, [x.degree, x.score]));
+      });
+
+      var b = document.getElementById("beyond-list");
+      DATA.activities.forEach(function (a) { b.appendChild(el("li", null, a)); });
+
+      ["cta", "cta2"].forEach(function (id) {
+        var box = document.getElementById(id);
+        [["GitHub", LINKS.github], ["LeetCode", LINKS.leetcode]].forEach(function (l) {
+          if (!l[1]) return;
+          var a = el("a", "btn", l[0]);
+          a.href = l[1]; a.target = "_blank"; a.rel = "noopener noreferrer";
+          box.appendChild(a);
+        });
+      });
+    })();
+
+    /* ---------- Theme toggle ---------- */
+    (function () {
+      var root = document.documentElement;
+      try { var t = localStorage.getItem("theme"); if (t) root.setAttribute("data-theme", t); } catch (e) { }
+      document.getElementById("theme").addEventListener("click", function () {
+        var cur = root.getAttribute("data-theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        var next = cur === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try { localStorage.setItem("theme", next); } catch (e) { }
+      });
+    })();
+
+    /* ---------- SQL shell ---------- */
+    (function () {
+      var out = document.getElementById("out");
+      var input = document.getElementById("q");
+      var history = [], hIdx = 0;
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      function scrollEnd() { out.scrollTop = out.scrollHeight; }
+      function echo(q) {
+        var d = el("div", "echo");
+        d.appendChild(el("span", "p", "sql>"));
+        d.appendChild(document.createTextNode(q));
+        out.appendChild(d);
+      }
+      function note(t) { out.appendChild(el("p", "note", t)); }
+      function err(t) { out.appendChild(el("p", "err", "ERROR: " + t)); }
+
+      function records(rows, cols) {
+        rows.forEach(function (r, i) {
+          var rec = el("div", "rec");
+          rec.appendChild(el("div", "rec-h", "-[ RECORD " + (i + 1) + " ]"));
+          var kv = el("div", "kv");
+          cols.forEach(function (c) {
+            kv.appendChild(el("span", "k", c));
+            kv.appendChild(el("span", "v", String(r[c])));
+          });
+          rec.appendChild(kv);
+          out.appendChild(rec);
+        });
+        note("(" + rows.length + (rows.length === 1 ? " row)" : " rows)"));
+      }
+
+      function help() {
+        var rows = [
+          ["SELECT * FROM projects;", "list every project"],
+          ["SELECT name FROM projects WHERE stack LIKE '%Java%';", "filter with = or LIKE"],
+          ["SELECT COUNT(*) FROM projects;", "count rows"],
+          ["\\dt", "list tables (also: show tables)"],
+          ["clear", "clear the screen"]
+        ];
+        var box = el("div", "rec");
+        rows.forEach(function (r) {
+          var row = el("div", "help-row");
+          row.appendChild(el("span", "k", r[0]));
+          row.appendChild(el("span", null, r[1]));
+          box.appendChild(row);
+        });
+        out.appendChild(box);
+      }
+
+      function select(q) {
+        var m = q.match(/^select\s+(.+?)\s+from\s+([a-z_]+)(?:\s+where\s+([a-z_]+)\s+(=|like)\s+(?:'([^']*)'|"([^"]*)"))?(?:\s+limit\s+(\d+))?$/i);
+        if (!m) return err("syntax error. Try: SELECT * FROM projects;");
+        var colsRaw = m[1].trim(), table = m[2].toLowerCase();
+        var rows = DATA[table];
+        if (!Array.isArray(rows) || !rows.length || typeof rows[0] !== "object") return err('table "' + table + '" does not exist. Type \\dt to list tables.');
+        var all = Object.keys(rows[0]).filter(function (k) { return k !== "bullets" && k !== "title" && k !== "howItWorks" && k !== "problemSolved"; });
+
+        if (m[3]) {
+          var wc = m[3].toLowerCase();
+          if (all.indexOf(wc) < 0) return err('column "' + wc + '" does not exist in ' + table + ".");
+          var val = (m[5] != null ? m[5] : m[6]).toLowerCase();
+          var op = m[4].toLowerCase();
+          var re = null;
+          if (op === "like") {
+            re = new RegExp("^" + val.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/%/g, ".*").replace(/_/g, ".") + "$", "i");
+          }
+          rows = rows.filter(function (r) {
+            var v = String(r[wc]).toLowerCase();
+            return re ? re.test(v) : v === val;
+          });
+        }
+        if (m[7]) rows = rows.slice(0, parseInt(m[7], 10));
+
+        if (/^count\(\*\)$/i.test(colsRaw)) {
+          return records([{ count: rows.length }], ["count"]);
+        }
+        var cols = colsRaw === "*" ? all : colsRaw.split(",").map(function (c) { return c.trim().toLowerCase(); });
+        for (var i = 0; i < cols.length; i++) {
+          if (all.indexOf(cols[i]) < 0) return err('column "' + cols[i] + '" does not exist in ' + table + ". Columns: " + all.join(", ") + ".");
+        }
+        records(rows, cols);
+      }
+
+      function run(raw) {
+        var q = raw.trim();
+        if (!q) return;
+        history.push(q); hIdx = history.length;
+        echo(q);
+        var clean = q.replace(/;+\s*$/, "").trim();
+        var low = clean.toLowerCase();
+        if (low === "clear" || low === "cls") { out.textContent = ""; return; }
+        if (low === "help" || low === "\\?" || low === "?") { help(); }
+        else if (low === "\\dt" || low === "show tables") {
+          records(Object.keys(DATA).map(function (t) { return { table: t, rows: DATA[t].length }; }), ["table", "rows"]);
+        }
+        else if (/^select\b/i.test(clean)) { select(clean); }
+        else { err('syntax error near "' + clean.split(/\s+/)[0] + '". Type help for commands.'); }
+        scrollEnd();
+      }
+
+      var typing = false;
+      function typeAndRun(text) {
+        if (typing) return;
+        if (reduce) { run(text); return; }
+        typing = true; input.readOnly = true; input.value = "";
+        var i = 0;
+        (function step() {
+          if (i < text.length) { input.value += text.charAt(i++); setTimeout(step, 26); }
+          else { setTimeout(function () { input.value = ""; run(text); input.readOnly = false; typing = false; }, 220); }
+        })();
+      }
+
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { var v = input.value; input.value = ""; run(v); }
+        else if (e.key === "ArrowUp") { if (hIdx > 0) { hIdx--; input.value = history[hIdx]; } e.preventDefault(); }
+        else if (e.key === "ArrowDown") {
+          if (hIdx < history.length - 1) { hIdx++; input.value = history[hIdx]; } else { hIdx = history.length; input.value = ""; }
+          e.preventDefault();
+        }
+      });
+      document.querySelectorAll(".try button").forEach(function (b) {
+        b.addEventListener("click", function () { typeAndRun(b.getAttribute("data-q")); });
+      });
+
+      note("Welcome. This is a small SQL shell over my portfolio data.");
+      typeAndRun("SELECT * FROM about;");
+    })();
+  </script>
+</body>
+
+</html>
